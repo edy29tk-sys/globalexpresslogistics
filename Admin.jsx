@@ -1,0 +1,12 @@
+import { useEffect,useState } from "react";
+import { supabase,supabaseReady } from "../lib/supabase";
+import { callFunction } from "../lib/api";
+import Notice from "../components/Notice";
+const statuses=["Shipment created","Label / processing","Picked up","In transit","Out for delivery","Delivered","On hold","Cancelled"];
+export default function Admin({user}) {
+ const [rows,setRows]=useState([]);const [error,setError]=useState("");const [message,setMessage]=useState("");const [loading,setLoading]=useState(true);
+ async function load(){if(!supabaseReady){setError("Connect Supabase first.");setLoading(false);return;}const {data,error}=await supabase.from("shipments").select("*").order("created_at",{ascending:false}).limit(100);if(error)setError(error.message);else setRows(data||[]);setLoading(false);}
+ useEffect(()=>{load();},[]);
+ async function update(id,status){setError("");setMessage("");try{const {data:{session}}=await supabase.auth.getSession();await callFunction("update-shipment",{method:"POST",headers:{Authorization:`Bearer ${session.access_token}`},body:JSON.stringify({shipmentId:id,status,description:`Status updated to ${status}`})});setMessage("Shipment status updated.");await load();}catch(e){setError(e.message);}}
+ return <main className="page-shell"><div className="container"><div className="page-title"><span className="eyebrow">OPERATIONS</span><h1>Admin dashboard.</h1><p>Manage shipment status and tracking milestones.</p></div>{error&&<Notice type="error">{error}</Notice>}{message&&<Notice type="success">{message}</Notice>}<div className="table-card"><div className="table-heading"><h2>All shipments</h2><span>{loading?"Loading...":`${rows.length} latest records`}</span></div><div className="responsive-table"><table><thead><tr><th>Tracking</th><th>Customer / route</th><th>Current status</th><th>Update status</th></tr></thead><tbody>{rows.map(s=><tr key={s.id}><td><strong>{s.tracking_number}</strong></td><td>{s.sender_name}<br/><small>{s.origin_city} → {s.destination_city}</small></td><td>{s.status}</td><td><select value={s.status} onChange={e=>update(s.id,e.target.value)}>{statuses.map(st=><option key={st}>{st}</option>)}</select></td></tr>)}</tbody></table></div></div></div></main>;
+}

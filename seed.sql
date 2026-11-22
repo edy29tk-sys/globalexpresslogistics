@@ -1,0 +1,3 @@
+-- Optional local/demo data is intentionally omitted.
+-- Create a user through Supabase Auth, then promote your own user to admin
+-- using the SQL statement in README.md.

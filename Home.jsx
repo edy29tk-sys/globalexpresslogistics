@@ -1,0 +1,23 @@
+import { Link } from "react-router-dom";
+import { ArrowRight, ArrowUpRight, Box, Clock3, Globe2, MapPin, Package, ShieldCheck, Truck, Plane, Ship } from "lucide-react";
+import { useState } from "react";
+export default function Home() {
+  const [tracking, setTracking] = useState("");
+  return <>
+    <section className="hero"><div className="container hero-grid"><div className="hero-copy">
+      <div className="eyebrow"><span/> YOUR WORLD. DELIVERED.</div>
+      <h1>Shipping without<br/><em>boundaries.</em></h1>
+      <p>Move your packages and business forward with straightforward international shipping and shipment visibility.</p>
+      <div className="hero-actions"><Link className="button" to="/ship">Ship a package <ArrowRight size={17}/></Link><Link className="button button-outline" to="/#services">Explore services</Link></div>
+      <div className="hero-points"><span><ShieldCheck/> Shipment visibility</span><span><Globe2/> Global reach</span></div>
+    </div><div className="hero-art"><div className="art-orbit orbit-one"/><div className="art-orbit orbit-two"/><div className="globe"><Globe2 size={150} strokeWidth={0.7}/></div><div className="floating-card card-top"><Plane size={18}/><span>International delivery<small>Across borders</small></span></div><div className="floating-card card-bottom"><Package size={19}/><span>Shipment updates<small>Follow every milestone</small></span></div><div className="route-line"/></div></div></section>
+    <section className="track-strip"><div className="container track-inner"><div><span className="eyebrow dark">TRACK YOUR SHIPMENT</span><h2>Where is your package?</h2></div><form className="track-form" onSubmit={e => {e.preventDefault(); location.href = `/track?number=${encodeURIComponent(tracking.trim())}`}}><input value={tracking} onChange={e => setTracking(e.target.value)} placeholder="Enter your tracking number" required/><button className="button">Track package <ArrowRight size={17}/></button></form></div></section>
+    <section className="section" id="services"><div className="container"><div className="section-heading"><div><span className="eyebrow">WHAT WE DO</span><h2>Shipping solutions for<br/>a connected world.</h2></div><p>From a single parcel to ongoing business shipments, explore services designed to help keep your deliveries moving.</p></div><div className="service-grid">
+      <article className="service-card"><div className="service-icon"><Plane/></div><h3>International express</h3><p>Priority cross-border shipping for time-sensitive packages, subject to destination and service availability.</p><Link to="/ship">Start a shipment <ArrowUpRight size={16}/></Link></article>
+      <article className="service-card"><div className="service-icon"><Truck/></div><h3>Domestic delivery</h3><p>Convenient shipping options for parcels moving within supported service areas.</p><Link to="/ship">Start a shipment <ArrowUpRight size={16}/></Link></article>
+      <article className="service-card"><div className="service-icon"><Ship/></div><h3>Freight solutions</h3><p>Plan larger cargo movements and request assistance for your freight requirements.</p><Link to="/contact">Talk to our team <ArrowUpRight size={16}/></Link></article>
+    </div></div></section>
+    <section className="process-section" id="how-it-works"><div className="container process-grid"><div><span className="eyebrow">SIMPLE BY DESIGN</span><h2>Send with confidence.<br/><em>Stay in the know.</em></h2><p>Create a shipment request, receive a unique reference, and check tracking milestones online.</p><Link className="button" to="/ship">Create a shipment <ArrowRight size={17}/></Link></div><div className="steps"><div><b>01</b><span><strong>Enter shipment details</strong><small>Tell us where your package is going and what it contains.</small></span></div><div><b>02</b><span><strong>Submit your request</strong><small>Sign in and submit the shipment details for processing.</small></span></div><div><b>03</b><span><strong>Follow the journey</strong><small>Use your tracking number to view available shipment updates.</small></span></div></div></div></section>
+    <section className="cta-section"><div className="container cta-inner"><div><span className="eyebrow">READY WHEN YOU ARE</span><h2>Your next delivery<br/>starts here.</h2></div><Link className="button button-light" to="/register">Create your account <ArrowRight size={17}/></Link></div></section>
+  </>;
+}
